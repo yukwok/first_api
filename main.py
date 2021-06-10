@@ -13,6 +13,7 @@ def is_iss_overhead():
     response = requests.get(url="http://api.open-notify.org/iss-now.json")
     response.raise_for_status()
     data = response.json()
+    print(type(data))
 
     iss_latitude = float(data["iss_position"]["latitude"])
     iss_longitude = float(data["iss_position"]["longitude"])
@@ -23,6 +24,7 @@ def is_iss_overhead():
 
 
 def is_night():
+    print("is night?")
     parameters = {
         "lat": MY_LAT,
         "lng": MY_LONG,
@@ -31,6 +33,7 @@ def is_night():
     response = requests.get("https://api.sunrise-sunset.org/json", params=parameters)
     response.raise_for_status()
     data = response.json()
+    print(response.raise_for_status())
     sunrise = int(data["results"]["sunrise"].split("T")[1].split(":")[0])
     sunset = int(data["results"]["sunset"].split("T")[1].split(":")[0])
 
@@ -43,7 +46,8 @@ def is_night():
 while True:
     time.sleep(1)
     print("running...")
-    if is_iss_overhead() and is_night():
+    if is_night() and is_iss_overhead() :
+        print('iss....')
         connection = smtplib.SMTP("__YOUR_SMTP_ADDRESS_HERE___")
         connection.starttls()
         connection.login(MY_EMAIL, MY_PASSWORD)
